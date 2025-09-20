@@ -9,9 +9,16 @@ module.exports = async function scrapeAmazon(productUrl) {
   if (!/^https?:\/\//i.test(productUrl)) throw new Error('Invalid URL');
 
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
+  headless: true,
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu'
+  ],
+  executablePath: puppeteer.executablePath() // <- ensures it uses Puppeteer Chromium
+});
+
 
   const page = await browser.newPage();
   await page.setUserAgent(
